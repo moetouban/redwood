@@ -6,6 +6,7 @@ import androidx.compose.runtime.compositionFor
 import androidx.compose.runtime.dispatch.DefaultMonotonicFrameClock
 import androidx.compose.runtime.dispatch.MonotonicFrameClock
 import androidx.compose.runtime.dispatch.withFrameMillis
+import androidx.compose.runtime.snapshots.Snapshot
 import app.cash.treehouse.protocol.Event
 import app.cash.treehouse.protocol.NodeDiff
 import app.cash.treehouse.protocol.PropertyDiff
@@ -98,6 +99,13 @@ private class RealTreehouseComposition(
       throw IllegalArgumentException("Unknown node ${event.nodeId} for event with tag ${event.tag}")
     }
     node.sendEvent(event)
+
+    // TODO Do NOT keep this here! It's a quick patch to restore functionality after alpha08 moved
+    //  handling of per-frame snapshot application to compose-ui. Long-term we likely want to move
+    //  the scope of events coming into the system towards the caller. This way, on Android,
+    //  for example, we can only commit per-frame. In the case of true client/server use we can
+    //  only commit after a batch of events.
+    Snapshot.sendApplyNotifications()
   }
 
   override fun setContent(content: @Composable TreehouseScope.() -> Unit) {
