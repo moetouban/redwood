@@ -1,15 +1,14 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinPluginKt
 
 apply plugin: 'org.jetbrains.kotlin.multiplatform'
-apply plugin: 'com.android.library'
 
 def generatedDir = 'build/generated/treehouse'
 
 kotlin {
-  android()
   js {
     browser()
   }
+  jvm()
 
   sourceSets {
     commonMain {

@@ -82,7 +82,10 @@ private class TreehouseGenerator : CliktCommand() {
         }
       }
       Test -> {
-        generateSchemaFactory(schema).writeTo(out)
+        generateSchemaWidgetFactory(schema).writeTo(out)
+        for (widget in schema.widgets) {
+          generateSchemaWidget(schema, widget).writeTo(out)
+        }
       }
     }
   }
