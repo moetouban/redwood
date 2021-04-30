@@ -17,6 +17,8 @@ kotlin {
       }
       dependencies {
         api project(':treehouse-compose')
+        api project(':example:sunspot:widget')
+        api project(':example:sunspot')
       }
     }
   }

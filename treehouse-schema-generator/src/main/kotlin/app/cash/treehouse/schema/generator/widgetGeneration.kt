@@ -121,7 +121,7 @@ internal fun generateWidget(schema: Schema, widget: Widget): FileSpec {
         .addSuperinterface(widgetOfT)
         .apply {
           for (trait in widget.traits) {
-            when (trait) {
+            @Exhaustive when (trait) {
               is Property -> {
                 addFunction(
                   FunSpec.builder(trait.name)
@@ -204,8 +204,3 @@ internal fun generateWidget(schema: Schema, widget: Widget): FileSpec {
     )
     .build()
 }
-
-private val typeVariableT = TypeVariableName("T", listOf(ANY))
-private val widgetOfT = widget.parameterizedBy(typeVariableT)
-private val childrenOfT = widgetChildren.parameterizedBy(typeVariableT)
-private val factoryOfT = widgetFactory.parameterizedBy(typeVariableT)

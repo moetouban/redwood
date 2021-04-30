@@ -27,69 +27,43 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier.OVERRIDE
 import com.squareup.kotlinpoet.KModifier.PRIVATE
 import com.squareup.kotlinpoet.KModifier.PUBLIC
-import com.squareup.kotlinpoet.LONG
+import com.squareup.kotlinpoet.NOTHING
 import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.STAR
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asTypeName
 import com.squareup.kotlinpoet.joinToCode
-import com.squareup.kotlinpoet.jvm.jvmField
+import app.cash.treehouse.schema.generator.widget as widgetType
 
 /*
 @Composable
-fun TreehouseScope.Button(
+fun Button(
   text: String,
   enabled: Boolean = true,
   onClick: (() -> Unit)? = null,
 ) {
-  ComposeNode<ButtonComposeNode, Applier<Node>>(
+  ComposeNode<Button<*>, Applier<Widget<*>>>(
     factory = {
-      ButtonNode(nextId())
+      factory.SunspotButton()
     },
     update = {
-      set(text) {
-        appendDiff(PropertyDiff(id, 1, text))
-      }
-      set(enabled) {
-        appendDiff(PropertyDiff(id, 2, enabled))
-      }
-      set(onClick) {
-        val onClickSet = onClick != null
-        if (onClickSet != (this.onClick != null)) {
-          appendDiff(PropertyDiff(id, 3, onClickSet))
-        }
-        this.onClick = onClick
-      }
-    }
+      set(text) { text(text) }
+      set(enabled) { enabled(enabled) }
+      set(onClick) { onClick(onClick) }
+    },
   )
-}
-
-private class ButtonComposeNode(id: Long) : Node(id, 2) {
-  var onClick: (() -> Unit)? = null
-
-  override fun sendEvent(event: Event) {
-    when (event.eventId) {
-      1L -> onClick?.invoke()
-      else -> throw IllegalArgumentException("Unknown event ID ${event.eventId}")
-    }
-  }
 }
 */
 internal fun generateComposeNode(schema: Schema, widget: Widget): FileSpec {
-  val events = widget.traits.filterIsInstance<Event>()
-  val nodeType = if (events.isEmpty()) {
-    protocolNode
-  } else {
-    schema.composeNodeType(widget)
-  }
   val applierOfServerNode = applier.parameterizedBy(protocolNode)
   return FileSpec.builder(schema.composePackage, widget.flatName)
     .addFunction(
       FunSpec.builder(widget.flatName)
         .addModifiers(PUBLIC)
         .addAnnotation(composable)
-        .receiver(treehouseScope)
+        .receiver(treehouseScope) // TODO generate this?
         .apply {
           for (trait in widget.traits) {
             addParameter(
@@ -119,13 +93,7 @@ internal fun generateComposeNode(schema: Schema, widget: Widget): FileSpec {
           arguments += CodeBlock.builder()
             .add("factory = {\n")
             .indent()
-            .apply {
-              if (events.isEmpty()) {
-                add("%T(nextId(), %L)\n", nodeType, widget.tag)
-              } else {
-                add("%T(nextId())\n", nodeType)
-              }
-            }
+            .add("factory.%N()\n", widget.flatName)
             .unindent()
             .add("}")
             .build()
@@ -134,28 +102,9 @@ internal fun generateComposeNode(schema: Schema, widget: Widget): FileSpec {
           val childrenLambda = CodeBlock.builder()
           for (trait in widget.traits) {
             @Exhaustive when (trait) {
-              is Property -> {
+              is Property, is Event -> {
                 updateLambda.apply {
-                  add("set(%N) {\n", trait.name)
-                  indent()
-                  add("appendDiff(%T(this.id, %L, %N))\n", propertyDiff, trait.tag, trait.name)
-                  unindent()
-                  add("}\n")
-                }
-              }
-              is Event -> {
-                updateLambda.apply {
-                  add("set(%N) {\n", trait.name)
-                  indent()
-                  add("val %1NSet = %1N != null\n", trait.name)
-                  add("if (%1NSet != (this.%1N != null)) {\n", trait.name)
-                  indent()
-                  add("appendDiff(%T(this.id, %L, %NSet))\n", propertyDiff, trait.tag, trait.name)
-                  unindent()
-                  add("}\n")
-                  add("this.%1N = %1N\n", trait.name)
-                  unindent()
-                  add("}\n")
+                  add("set(%1N) { %1N(%1N) }\n", trait.name)
                 }
               }
               is Children -> {
@@ -188,53 +137,137 @@ internal fun generateComposeNode(schema: Schema, widget: Widget): FileSpec {
               .build()
           }
 
+          val nodeType = if (widget.traits.any { it is Event }) {
+            widgetType
+          } else {
+            schema.widgetType(widget)
+          }
           addStatement(
-            "%M<%T, %T>(%L)", composeNode, nodeType, applierOfServerNode,
+            "%M<%T, %T>(%L)", composeNode, nodeType.parameterizedBy(STAR), applierOfServerNode,
             arguments.joinToCode(",\n", "\n", ",\n")
           )
         }
         .build()
     )
+    .build()
+}
+
+/*
+class ProtocolSunspotWidgetFactory(
+  private val scope: TreehouseScope,
+) : SunspotWidgetFactory<Nothing> {
+  override fun SunspotBox(): SunspotBox<Nothing> = ProtocolSunspotBox(scope)
+  // ...
+}
+
+private class ProtocolSunspotBox(
+  private val scope: TreehouseScope,
+) : ProtocolNode(scope.nextId(), 1), SunspotBox<Nothing> {
+  // ...
+}
+*/
+internal fun generateProtocolFactory(schema: Schema): FileSpec {
+  return FileSpec.builder(schema.composePackage, "protocolFactory")
+    .addType(TypeSpec.classBuilder("Protocol${schema.name}WidgetFactory")
+      .addSuperinterface(schema.getWidgetFactoryType().parameterizedBy(NOTHING))
+      .primaryConstructor(FunSpec.constructorBuilder()
+        .addParameter("scope", treehouseScope)
+        .build())
+      .addProperty(PropertySpec.builder("scope", treehouseScope, PRIVATE)
+        .initializer("scope")
+        .build())
+      .apply {
+        for (widget in schema.widgets) {
+          addFunction(FunSpec.builder(widget.flatName)
+            .addModifiers(OVERRIDE)
+            .returns(schema.widgetType(widget).parameterizedBy(NOTHING))
+            .addStatement("return %T(scope)", schema.protocolType(widget))
+            .build())
+        }
+      }
+      .build())
     .apply {
-      if (events.isNotEmpty()) {
-        addType(
-          TypeSpec.classBuilder(nodeType)
-            .addModifiers(PRIVATE)
-            .primaryConstructor(
-              FunSpec.constructorBuilder()
-                .addParameter("id", LONG)
-                .build()
-            )
-            .superclass(protocolNode)
-            .addSuperclassConstructorParameter("id")
-            .addSuperclassConstructorParameter("%L", widget.tag)
-            .apply {
-              for (event in events) {
-                addProperty(
-                  PropertySpec.builder(event.name, eventLambda.copy(nullable = true))
-                    .mutable(true)
-                    .initializer("null")
-                    .jvmField() // Method count optimization as this is implementation detail.
-                    .build()
-                )
+      for (widget in schema.widgets) {
+        addType(TypeSpec.classBuilder(schema.protocolType(widget))
+          .addModifiers(PRIVATE)
+          .primaryConstructor(FunSpec.constructorBuilder()
+            .addParameter("scope", treehouseScope)
+            .build())
+          .addProperty(PropertySpec.builder("scope", treehouseScope, PRIVATE)
+            .initializer("scope")
+            .build())
+          .superclass(protocolNode)
+          .addSuperclassConstructorParameter("scope.nextId()")
+          .addSuperclassConstructorParameter("%L", widget.tag)
+          .addSuperinterface(schema.widgetType(widget).parameterizedBy(NOTHING))
+          .addProperty(PropertySpec.builder("value", NOTHING, OVERRIDE)
+            .getter(FunSpec.getterBuilder()
+              .addStatement("throw %T()", uoe)
+              .build())
+            .build())
+          .apply {
+            for (trait in widget.traits) {
+              @Exhaustive when (trait) {
+                is Property -> {
+                  addFunction(
+                    FunSpec.builder(trait.name)
+                      .addModifiers(PUBLIC, OVERRIDE)
+                      .addParameter(trait.name, trait.type.asTypeName())
+                      .addStatement("scope.appendDiff(%T(this.id, %L, %N))", propertyDiff, trait.tag, trait.name)
+                      .build()
+                  )
+                }
+                is Event -> {
+                  addProperty(
+                    PropertySpec.builder(trait.name, eventLambda.copy(nullable = true), PRIVATE)
+                      .mutable(true)
+                      .initializer("null")
+                      .build()
+                  )
+                  addFunction(
+                    FunSpec.builder(trait.name)
+                      .addModifiers(PUBLIC, OVERRIDE)
+                      .addParameter(trait.name, eventLambda)
+                      .addStatement("val %1NSet = %1N != null", trait.name)
+                      .beginControlFlow("if (%1NSet != (this.%1N != null))", trait.name)
+                      .addStatement("scope.appendDiff(%T(this.id, %L, %NSet))", propertyDiff, trait.tag, trait.name)
+                      .endControlFlow()
+                      .addStatement("this.%1N = %1N", trait.name)
+                      .build()
+                  )
+                }
+                is Children -> {
+                  addProperty(
+                    PropertySpec.builder(trait.name, widgetChildren.parameterizedBy(NOTHING))
+                      .addModifiers(PUBLIC, OVERRIDE)
+                      .getter(FunSpec.getterBuilder()
+                        .addStatement("throw %T()", uoe)
+                        .build())
+                      .build()
+                  )
+                }
               }
             }
-            .addFunction(
-              FunSpec.builder("sendEvent")
-                .addModifiers(PUBLIC, OVERRIDE)
-                .addParameter("event", eventType)
-                .beginControlFlow("when (val tag = event.tag)")
-                .apply {
-                  for (event in events) {
-                    addStatement("%L -> %N?.invoke()", event.tag, event.name)
+
+            val events = widget.traits.filterIsInstance<Event>()
+            if (events.isNotEmpty()) {
+              addFunction(
+                FunSpec.builder("sendEvent")
+                  .addModifiers(OVERRIDE)
+                  .addParameter("event", eventType)
+                  .beginControlFlow("when (val tag = event.tag)")
+                  .apply {
+                    for (event in events.sortedBy { it.tag }) {
+                      addStatement("%L -> %N?.invoke()", event.tag, event.name)
+                    }
                   }
-                }
-                .addStatement("else -> throw %T(\"Unknown tag \$tag\")", iae)
-                .endControlFlow()
-                .build()
-            )
-            .build()
-        )
+                  .addStatement("else -> throw %T(\"Unknown tag \$tag\")", iae)
+                  .endControlFlow()
+                  .build()
+              )
+            }
+          }
+          .build())
       }
     }
     .build()

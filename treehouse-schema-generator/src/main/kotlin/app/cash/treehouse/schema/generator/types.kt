@@ -15,10 +15,13 @@
  */
 package app.cash.treehouse.schema.generator
 
+import com.squareup.kotlinpoet.ANY
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.LambdaTypeName
 import com.squareup.kotlinpoet.MemberName
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.TypeVariableName
 import com.squareup.kotlinpoet.UNIT
 
 internal val eventType = ClassName("app.cash.treehouse.protocol", "Event")
@@ -31,6 +34,11 @@ internal val widget = ClassName("app.cash.treehouse.widget", "Widget")
 internal val widgetChildren = widget.nestedClass("Children")
 internal val widgetFactory = widget.nestedClass("Factory")
 internal val mutableListChildren = ClassName("app.cash.treehouse.widget", "MutableListChildren")
+
+internal val typeVariableT = TypeVariableName("T", listOf(ANY))
+internal val widgetOfT = widget.parameterizedBy(typeVariableT)
+internal val childrenOfT = widgetChildren.parameterizedBy(typeVariableT)
+internal val factoryOfT = widgetFactory.parameterizedBy(typeVariableT)
 
 internal val protocolNode = ClassName("app.cash.treehouse.compose", "ProtocolNode")
 internal val syntheticChildren = MemberName("app.cash.treehouse.compose", "\$SyntheticChildren")
@@ -48,3 +56,4 @@ internal val composableLambda = LambdaTypeName.get(returnType = UNIT)
   )
 
 internal val iae = ClassName("kotlin", "IllegalArgumentException")
+internal val uoe = ClassName("kotlin", "UnsupportedOperationException")

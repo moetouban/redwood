@@ -18,8 +18,9 @@ kotlin {
     commonMain {
       dependencies {
         api deps.kotlinx.coroutines.core
-        api project(':treehouse-protocol')
         api project(':compose:runtime')
+        api project(':treehouse-protocol')
+        implementation project(':treehouse-widget')
       }
     }
     commonTest {

@@ -77,6 +77,7 @@ private class TreehouseGenerator : CliktCommand() {
         }
       }
       Compose -> {
+        generateProtocolFactory(schema).writeTo(out)
         for (widget in schema.widgets) {
           generateComposeNode(schema, widget).writeTo(out)
         }

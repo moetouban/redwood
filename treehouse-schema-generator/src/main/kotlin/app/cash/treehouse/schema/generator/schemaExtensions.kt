@@ -27,8 +27,8 @@ import com.squareup.kotlinpoet.asClassName
 internal val Widget.flatName: String
   get() = type.asClassName().simpleNames.joinToString(separator = "")
 
-internal fun Schema.composeNodeType(widget: Widget): ClassName {
-  return ClassName(composePackage, widget.flatName + "ComposeNode")
+internal fun Schema.protocolType(widget: Widget): ClassName {
+  return ClassName(composePackage, "Protocol${widget.flatName}")
 }
 
 internal val Schema.composePackage get() = "$`package`.compose"
