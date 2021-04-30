@@ -31,6 +31,10 @@ internal fun Schema.composeNodeType(widget: Widget): ClassName {
   return ClassName(composePackage, widget.flatName + "ComposeNode")
 }
 
+internal fun Schema.schemaType(widget: Widget): ClassName {
+  return ClassName(composePackage, "Schema${widget.flatName}")
+}
+
 internal val Schema.composePackage get() = "$`package`.compose"
 
 internal fun Schema.widgetType(widget: Widget): ClassName {

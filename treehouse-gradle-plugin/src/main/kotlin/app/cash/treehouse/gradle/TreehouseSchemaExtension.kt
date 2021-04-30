@@ -15,11 +15,15 @@
  */
 package app.cash.treehouse.gradle
 
+import org.gradle.api.Project
+
 public interface TreehouseSchemaExtension {
-  public var schema: String?
+  public var source: Project?
+  public var type: String?
 }
 
 // Gradle requires this type to be open since it runtime extends it.
 internal open class TreehouseSchemaExtensionImpl @JvmOverloads constructor(
-  override var schema: String? = null,
+  override var source: Project? = null,
+  override var type: String? = null,
 ) : TreehouseSchemaExtension

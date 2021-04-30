@@ -30,6 +30,7 @@ internal val eventLambda = LambdaTypeName.get(returnType = UNIT).copy(nullable =
 internal val widget = ClassName("app.cash.treehouse.widget", "Widget")
 internal val widgetChildren = widget.nestedClass("Children")
 internal val widgetFactory = widget.nestedClass("Factory")
+internal val mutableListChildren = ClassName("app.cash.treehouse.widget", "MutableListChildren")
 
 internal val protocolNode = ClassName("app.cash.treehouse.compose", "ProtocolNode")
 internal val syntheticChildren = MemberName("app.cash.treehouse.compose", "\$SyntheticChildren")
