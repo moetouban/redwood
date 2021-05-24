@@ -1,0 +1,27 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+configurations {
+  js
+}
+
+dependencies {
+  implementation project(':samples:counter-updatable:schema:widget')
+  implementation deps.kotlinx.coroutines.android
+  implementation deps.kotlinx.serialization.json
+  implementation deps.duktape
+
+  js project(path: ':samples:counter-updatable:presenters', configuration: 'content')
+}
+
+def output = file("$projectDir/src/main/assets")
+def task = tasks.register("presenterJsCopy", Copy) { task ->
+  task.from(configurations.js)
+  task.into(output)
+}
+
+android.applicationVariants.all { variant ->
+  tasks.named("merge${variant.name.capitalize()}Assets").configure {
+    it.dependsOn(task)
+  }
+}

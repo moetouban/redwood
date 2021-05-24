@@ -1,0 +1,24 @@
+apply plugin: 'org.jetbrains.kotlin.js'
+apply plugin: 'app.cash.treehouse'
+
+kotlin {
+  js {
+    browser()
+    binaries.executable()
+  }
+}
+
+dependencies {
+  implementation project(':samples:counter-updatable:schema:compose')
+  implementation deps.kotlinx.serialization.json
+}
+
+configurations {
+  content
+}
+
+artifacts {
+  content(file("$buildDir/distributions/${name}.js")) {
+    builtBy 'browserProductionWebpack'
+  }
+}

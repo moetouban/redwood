@@ -8,6 +8,12 @@ include ':samples:counter:sunspot:compose'
 include ':samples:counter:sunspot:test'
 include ':samples:counter:sunspot:widget'
 
+include ':samples:counter-updatable:android'
+include ':samples:counter-updatable:presenters'
+include ':samples:counter-updatable:schema'
+include ':samples:counter-updatable:schema:compose'
+include ':samples:counter-updatable:schema:widget'
+
 includeBuild('treehouse') {
   dependencySubstitution {
     substitute module('app.cash.treehouse:treehouse-compose') with project(':treehouse-compose')
