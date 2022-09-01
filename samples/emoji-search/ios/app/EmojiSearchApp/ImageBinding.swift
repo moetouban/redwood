@@ -11,10 +11,6 @@ import shared
 import UIKit
 
 class ImageBinding: WidgetImage {
-    func label(label: String) {
-        // do nothing.
-    }
-    
     private let root: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit

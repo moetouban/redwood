@@ -14,6 +14,9 @@ import shared
 class IosEmojiSearchWidgetFactory: WidgetEmojiSearchWidgetFactory {
     let imageLoader = RemoteImageLoader()
     
+    func Row() -> WidgetRow {
+        return RowBinding()
+    }
     func Column() -> WidgetColumn {
         return ColumnBinding()
     }
@@ -23,8 +26,10 @@ class IosEmojiSearchWidgetFactory: WidgetEmojiSearchWidgetFactory {
     func TextInput() -> WidgetTextInput {
         return TextInputBinding()
     }
+    func Text() -> WidgetText {
+        return TextBinding()
+    }
     func Image() -> WidgetImage {
-        print("MAKING AN IMAGE🦄 ")
         return ImageBinding(imageLoader: imageLoader)
     }
 }
