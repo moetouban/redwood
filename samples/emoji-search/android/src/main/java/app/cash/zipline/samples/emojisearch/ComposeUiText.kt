@@ -13,24 +13,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import app.cash.redwood.LayoutModifier
 import coil.compose.AsyncImage
-import example.schema.widget.Image
+import example.schema.widget.Text
 
-class ComposeUiImage : Image<@Composable () -> Unit> {
-  private var url by mutableStateOf("")
+class ComposeUiText : Text<@Composable () -> Unit> {
+  private var text by mutableStateOf("")
 
   override var layoutModifiers: LayoutModifier = LayoutModifier
 
   override val value = @Composable {
-    AsyncImage(
-      model = url,
-      contentDescription = null,
-      modifier = Modifier
-        .size(64.dp)
-        .padding(8.dp),
+    Text(
+      text = text,
     )
   }
 
-  override fun url(url: String) {
-    this.url = url
+  override fun text(text: String) {
+    this.text = text
   }
 }
