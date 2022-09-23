@@ -2,6 +2,7 @@ rootProject.name = 'redwood'
 
 include ':redwood-cli'
 include ':redwood-compose'
+include ':redwood-compose-layout'
 include ':redwood-flexbox-engine'
 include ':redwood-gradle-plugin'
 include ':redwood-protocol'
