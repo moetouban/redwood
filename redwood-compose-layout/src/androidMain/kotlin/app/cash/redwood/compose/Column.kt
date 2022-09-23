@@ -29,15 +29,14 @@ public class Column(context: Context) : ColumnWidget<View> {
     flexDirection = FlexDirection.Column
   }
 
-  private val _view = HostView(context)
-  override val value: View get() = _view
+  private val view = HostView(context)
 
   private val _children = MutableListChildren(
     onUpdate = { nodes ->
       engine.nodes.clear()
       nodes.forEach { engine.nodes += it.asNode() }
-      _view.invalidate()
-      _view.requestLayout()
+      view.invalidate()
+      view.requestLayout()
     },
   )
   public val children: Widget.Children<View> get() = _children
@@ -61,6 +60,8 @@ public class Column(context: Context) : ColumnWidget<View> {
     set(value) {
       engine.justifyContent = value.toJustifyContent()
     }
+
+  override val value: View = view
 
   override var layoutModifiers: LayoutModifier = LayoutModifier
 
