@@ -31,10 +31,14 @@ public fun Column(
   layoutModifier: LayoutModifier = LayoutModifier,
   children: @Composable ColumnScope.() -> Unit,
 ) {
-  RedwoodComposeNode<Widget.Factory<*>, Widget<*>>(
-    factory = { TODO() },
+  RedwoodComposeNode(
+    factory = ColumnWidget.Factory<*>::Column,
     update = {
-      set(layoutModifier) { layoutModifiers = layoutModifier }
+      set(padding) { this.padding = padding }
+      set(overflow) { this.overflow = overflow }
+      set(horizontalAlignment) { this.horizontalAlignment = horizontalAlignment }
+      set(verticalAlignment) { this.verticalAlignment = verticalAlignment }
+      set(layoutModifier) { this.layoutModifiers = layoutModifier }
     },
     content = {
       _SyntheticChildren(1234) {
@@ -55,6 +59,17 @@ public interface ColumnScope {
 
   /** Equivalent to `align-self`. */
   public fun LayoutModifier.horizontalAlignment(alignment: CrossAxisAlignment): LayoutModifier
+}
+
+internal interface ColumnWidget<T : Any> : Widget<T> {
+  var padding: Padding
+  var overflow: Overflow
+  var horizontalAlignment: CrossAxisAlignment
+  var verticalAlignment: MainAxisAlignment
+
+  interface Factory<T : Any> : Widget.Factory<T> {
+    fun Column(): ColumnWidget<T>
+  }
 }
 
 private object RealColumnScope : ColumnScope {

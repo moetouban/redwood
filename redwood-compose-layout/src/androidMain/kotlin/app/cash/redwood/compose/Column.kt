@@ -24,7 +24,7 @@ import app.cash.redwood.LayoutModifier
 import app.cash.redwood.widget.MutableListChildren
 import app.cash.redwood.widget.Widget
 
-public class Column(context: Context) : Widget<View> {
+public class Column(context: Context) : ColumnWidget<View> {
   private val engine = FlexboxEngine().apply {
     flexDirection = FlexDirection.Column
   }
@@ -42,25 +42,25 @@ public class Column(context: Context) : Widget<View> {
   )
   public val children: Widget.Children<View> get() = _children
 
-  public var padding: Padding
+  override var padding: Padding
     get() = engine.padding.toPadding()
     set(value) {
       engine.padding = value.toSpacing()
     }
 
-  public var horizontalAlignment: CrossAxisAlignment
+  override var overflow: Overflow = Overflow.Clip
+
+  override var horizontalAlignment: CrossAxisAlignment
     get() = engine.alignItems.toCrossAxisAlignment()
     set(value) {
       engine.alignItems = value.toAlignItems()
     }
 
-  public var verticalAlignment: MainAxisAlignment
+  override var verticalAlignment: MainAxisAlignment
     get() = engine.justifyContent.toMainAxisAlignment()
     set(value) {
       engine.justifyContent = value.toJustifyContent()
     }
-
-  public var overflow: Overflow = Overflow.Clip
 
   override var layoutModifiers: LayoutModifier = LayoutModifier
 
