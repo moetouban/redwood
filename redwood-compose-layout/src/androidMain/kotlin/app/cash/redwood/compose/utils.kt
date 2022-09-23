@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 @file:JvmName("androidUtils") // Avoid name conflicts.
 
 package app.cash.redwood.compose
@@ -31,7 +30,7 @@ import app.cash.redwood.Spacing
 
 internal fun MeasureSpec.Companion.fromAndroid(measureSpec: Int): MeasureSpec = from(
   size = View.MeasureSpec.getSize(measureSpec),
-  mode = MeasureSpecMode.fromAndroid(View.MeasureSpec.getMode(measureSpec))
+  mode = MeasureSpecMode.fromAndroid(View.MeasureSpec.getMode(measureSpec)),
 )
 
 internal fun MeasureSpec.toAndroid(): Int = View.MeasureSpec.makeMeasureSpec(size, mode.toAndroid())
