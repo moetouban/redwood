@@ -15,12 +15,18 @@
  */
 package app.cash.redwood.compose
 
-import app.cash.redwood.LayoutModifier
+import app.cash.redwood.widget.Widget
 
-public data class GrowLayoutModifier(val value: Int) : LayoutModifier.Element
+public interface RowWidget<T : Any> : Widget<T> {
+  public var padding: Padding
+  public var overflow: Overflow
+  public var horizontalAlignment: MainAxisAlignment
+  public var verticalAlignment: CrossAxisAlignment
+}
 
-public data class ShrinkLayoutModifier(val value: Int) : LayoutModifier.Element
-
-public data class HorizontalAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
-
-public data class VerticalAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
+public interface ColumnWidget<T : Any> : Widget<T> {
+  public var padding: Padding
+  public var overflow: Overflow
+  public var horizontalAlignment: CrossAxisAlignment
+  public var verticalAlignment: MainAxisAlignment
+}

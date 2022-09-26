@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@file:JvmName("androidUtils") // Avoid name conflicts.
+@file:JvmName("viewUtils") // Avoid name conflicts.
 
 package app.cash.redwood.compose
 

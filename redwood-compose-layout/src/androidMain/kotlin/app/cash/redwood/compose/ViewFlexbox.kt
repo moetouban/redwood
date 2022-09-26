@@ -24,11 +24,8 @@ import app.cash.redwood.LayoutModifier
 import app.cash.redwood.widget.MutableListChildren
 import app.cash.redwood.widget.Widget
 
-public class Column(context: Context) : ColumnWidget<View> {
-  private val engine = FlexboxEngine().apply {
-    flexDirection = FlexDirection.Column
-  }
-
+private class ViewFlexbox(context: Context) {
+  private val engine = FlexboxEngine()
   private val view = HostView(context)
 
   private val _children = MutableListChildren(
@@ -41,31 +38,37 @@ public class Column(context: Context) : ColumnWidget<View> {
   )
   public val children: Widget.Children<View> get() = _children
 
-  override var padding: Padding
+  var direction: FlexDirection
+    get() = engine.flexDirection
+    set(value) {
+      engine.flexDirection = value
+    }
+
+  var padding: Padding
     get() = engine.padding.toPadding()
     set(value) {
       engine.padding = value.toSpacing()
     }
 
-  override var overflow: Overflow = Overflow.Clip
+  var overflow: Overflow = Overflow.Clip
 
-  override var horizontalAlignment: CrossAxisAlignment
+  var horizontalAlignment: CrossAxisAlignment
     get() = engine.alignItems.toCrossAxisAlignment()
     set(value) {
       engine.alignItems = value.toAlignItems()
     }
 
-  override var verticalAlignment: MainAxisAlignment
+  var verticalAlignment: MainAxisAlignment
     get() = engine.justifyContent.toMainAxisAlignment()
     set(value) {
       engine.justifyContent = value.toJustifyContent()
     }
 
-  override val value: View = view
+  val value: View = view
 
-  override var layoutModifiers: LayoutModifier = LayoutModifier
+  var layoutModifiers: LayoutModifier = LayoutModifier
 
-  private inner class HostView(context: Context) : View(context) {
+  inner class HostView(context: Context) : View(context) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
       val widthSpec = RedwoodMeasureSpec.fromAndroid(widthMeasureSpec)
@@ -77,4 +80,8 @@ public class Column(context: Context) : ColumnWidget<View> {
       engine.layout(left, top, right, bottom)
     }
   }
+}
+
+public class ViewColumn(context: Context) : ColumnWidget<View> {
+
 }
