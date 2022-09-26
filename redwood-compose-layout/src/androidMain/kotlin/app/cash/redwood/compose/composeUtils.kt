@@ -16,36 +16,20 @@
 
 package app.cash.redwood.compose
 
-import androidx.compose.ui.layout.Measurable
 import androidx.compose.ui.unit.Constraints
-import app.cash.redwood.AlignSelf
 import app.cash.redwood.MeasureSpec
-import app.cash.redwood.Node
-import app.cash.redwood.Node.Companion.DefaultFlexBasisPercent
-import app.cash.redwood.Node.Companion.DefaultFlexGrow
-import app.cash.redwood.Node.Companion.DefaultFlexShrink
-import app.cash.redwood.Spacing
+import app.cash.redwood.MeasureSpecMode
 
 internal fun Constraints.toMeasureSpecs(): Pair<MeasureSpec, MeasureSpec> {
-
-}
-
-private class MeasurableNode(private val measurable: Measurable) : Node {
-  override val alignSelf = AlignSelf.Auto
-  override val baseline = -1
-  override val flexBasisPercent = DefaultFlexBasisPercent
-  override val flexGrow = DefaultFlexGrow
-  override val flexShrink = DefaultFlexShrink
-  override val width get() = view.width
-  override val height get() = view.height
-  override val margin = Spacing.Zero
-  override val maxHeight = Int.MAX_VALUE
-  override val maxWidth = Int.MAX_VALUE
-  override val measuredWidth get() = view.measuredWidth
-  override val measuredHeight get() = view.measuredHeight
-  override val minWidth get() = view.minimumWidth
-  override val minHeight get() = view.minimumHeight
-  override val order = Node.DefaultOrder
-  override val visible = true
-  override val wrapBefore = false
+  val widthSpec = when {
+    hasFixedWidth -> MeasureSpec.from(maxWidth, MeasureSpecMode.Exactly)
+    hasBoundedWidth -> MeasureSpec.from(maxWidth, MeasureSpecMode.AtMost)
+    else -> MeasureSpec.from(minWidth, MeasureSpecMode.Unspecified)
+  }
+  val heightSpec = when {
+    hasFixedHeight -> MeasureSpec.from(maxHeight, MeasureSpecMode.Exactly)
+    hasBoundedHeight -> MeasureSpec.from(maxHeight, MeasureSpecMode.AtMost)
+    else -> MeasureSpec.from(minHeight, MeasureSpecMode.Unspecified)
+  }
+  return widthSpec to heightSpec
 }

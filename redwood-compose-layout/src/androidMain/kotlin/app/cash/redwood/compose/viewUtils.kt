@@ -18,15 +18,10 @@
 package app.cash.redwood.compose
 
 import android.view.View
-import app.cash.redwood.AlignSelf
 import app.cash.redwood.MeasureSpec
 import app.cash.redwood.MeasureSpecMode
 import app.cash.redwood.Node
-import app.cash.redwood.Node.Companion.DefaultFlexBasisPercent
-import app.cash.redwood.Node.Companion.DefaultFlexGrow
-import app.cash.redwood.Node.Companion.DefaultFlexShrink
-import app.cash.redwood.Node.Companion.DefaultOrder
-import app.cash.redwood.Spacing
+import app.cash.redwood.Size
 
 internal fun MeasureSpec.Companion.fromAndroid(measureSpec: Int): MeasureSpec = from(
   size = View.MeasureSpec.getSize(measureSpec),
@@ -49,32 +44,13 @@ internal fun MeasureSpecMode.toAndroid(): Int = when (this) {
   else -> throw AssertionError()
 }
 
-internal fun View.asNode(): Node = ViewNode(this)
-
-private class ViewNode(private val view: View) : Node {
-  override val alignSelf = AlignSelf.Auto
-  override val baseline = -1
-  override val flexBasisPercent = DefaultFlexBasisPercent
-  override val flexGrow = DefaultFlexGrow
-  override val flexShrink = DefaultFlexShrink
-  override val width get() = view.width
-  override val height get() = view.height
-  override val margin = Spacing.Zero
-  override val maxHeight = Int.MAX_VALUE
-  override val maxWidth = Int.MAX_VALUE
-  override val measuredWidth get() = view.measuredWidth
-  override val measuredHeight get() = view.measuredHeight
-  override val minWidth get() = view.minimumWidth
-  override val minHeight get() = view.minimumHeight
-  override val order = DefaultOrder
-  override val visible = true
-  override val wrapBefore = false
-
-  override fun measure(widthSpec: MeasureSpec, heightSpec: MeasureSpec) {
-    view.measure(widthSpec.toAndroid(), heightSpec.toAndroid())
+internal fun View.asNode() = Node(
+  width = width,
+  height = height,
+).apply {
+  measure = { widthSpec, heightSpec ->
+    measure(widthSpec.toAndroid(), heightSpec.toAndroid())
+    Size(measuredWidth, measuredHeight)
   }
-
-  override fun layout(left: Int, top: Int, right: Int, bottom: Int) {
-    view.layout(left, top, right, bottom)
-  }
+  layout = ::layout
 }

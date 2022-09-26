@@ -16,12 +16,17 @@
 
 package app.cash.redwood.compose
 
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.Placeable
 import app.cash.redwood.FlexDirection
 import app.cash.redwood.FlexboxEngine
 import app.cash.redwood.LayoutModifier
+import app.cash.redwood.Node
 
 private class ComposeFlexbox : ColumnWidget<@Composable () -> Unit> {
   private val engine = FlexboxEngine()
@@ -55,16 +60,43 @@ private class ComposeFlexbox : ColumnWidget<@Composable () -> Unit> {
   override var layoutModifiers: LayoutModifier = LayoutModifier
 
   override val value = @Composable {
+    val modifier = if (overflow == Overflow.Scroll) {
+      when (direction) {
+        FlexDirection.Row, FlexDirection.RowReverse -> {
+          Modifier.horizontalScroll(rememberScrollState())
+        }
+        FlexDirection.Column, FlexDirection.ColumnReverse -> {
+          Modifier.verticalScroll(rememberScrollState())
+        }
+        else -> throw AssertionError()
+      }
+    } else {
+      Modifier
+    }
+
     Layout(
-      modifier = Modifier,
+      modifier = modifier,
       measurePolicy = { measurables, constraints ->
-        val placeable = measurables[0].measure(modifyConstraints(constraints))
-        layout(placeable.width, placeable.height) {
+        engine.nodes.clear()
+        val composeNodes = measurables.map { measurable ->
+          ComposeNode().also { engine.nodes += it.node }
+        }
+        val (widthSpec, heightSpec) = constraints.toMeasureSpecs()
+        val (width, height) = engine.measure(widthSpec, heightSpec)
+        layout(width, height) {
           placeable.placeRelative(0, 0)
         }
       }
     )
   }
 
+  class ComposeNode {
+    val node = Node()
+    var placeable: Placeable? = null
+
+    init {
+        node.measure =
+    }
+  }
 }
 

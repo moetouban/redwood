@@ -18,6 +18,7 @@ package app.cash.redwood.compose
 import app.cash.redwood.MeasureSpec.Companion as RedwoodMeasureSpec
 import android.content.Context
 import android.view.View
+import android.widget.ScrollView
 import app.cash.redwood.FlexDirection
 import app.cash.redwood.FlexboxEngine
 import app.cash.redwood.LayoutModifier
@@ -25,50 +26,19 @@ import app.cash.redwood.widget.MutableListChildren
 import app.cash.redwood.widget.Widget
 
 private class ViewFlexbox(context: Context) {
-  private val engine = FlexboxEngine()
-  private val view = HostView(context)
+  val engine = FlexboxEngine()
+  val view = HostView(context)
 
-  private val _children = MutableListChildren(
-    onUpdate = { nodes ->
+  val children = MutableListChildren(
+    onUpdate = { views ->
       engine.nodes.clear()
-      nodes.forEach { engine.nodes += it.asNode() }
+      views.forEach { engine.nodes += it.asNode() }
       view.invalidate()
       view.requestLayout()
     },
   )
-  public val children: Widget.Children<View> get() = _children
 
-  var direction: FlexDirection
-    get() = engine.flexDirection
-    set(value) {
-      engine.flexDirection = value
-    }
-
-  var padding: Padding
-    get() = engine.padding.toPadding()
-    set(value) {
-      engine.padding = value.toSpacing()
-    }
-
-  var overflow: Overflow = Overflow.Clip
-
-  var horizontalAlignment: CrossAxisAlignment
-    get() = engine.alignItems.toCrossAxisAlignment()
-    set(value) {
-      engine.alignItems = value.toAlignItems()
-    }
-
-  var verticalAlignment: MainAxisAlignment
-    get() = engine.justifyContent.toMainAxisAlignment()
-    set(value) {
-      engine.justifyContent = value.toJustifyContent()
-    }
-
-  val value: View = view
-
-  var layoutModifiers: LayoutModifier = LayoutModifier
-
-  inner class HostView(context: Context) : View(context) {
+  inner class HostView(context: Context) : ScrollView(context) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
       val widthSpec = RedwoodMeasureSpec.fromAndroid(widthMeasureSpec)
@@ -82,6 +52,32 @@ private class ViewFlexbox(context: Context) {
   }
 }
 
-public class ViewColumn(context: Context) : ColumnWidget<View> {
+public class ViewColumnDelegate(context: Context) : Widget<View> {
+  private val flexbox = ViewFlexbox(context).apply {
+    engine.flexDirection = FlexDirection.Column
+  }
 
+  public var padding: Padding
+    get() = flexbox.engine.padding.toPadding()
+    set(value) {
+      flexbox.engine.padding = value.toSpacing()
+    }
+
+  public var overflow: Overflow = Overflow.Clip
+
+  public var horizontalAlignment: CrossAxisAlignment
+    get() = flexbox.engine.alignItems.toCrossAxisAlignment()
+    set(value) {
+      flexbox.engine.alignItems = value.toAlignItems()
+    }
+
+  public var verticalAlignment: MainAxisAlignment
+    get() = flexbox.engine.justifyContent.toMainAxisAlignment()
+    set(value) {
+      flexbox.engine.justifyContent = value.toJustifyContent()
+    }
+
+  override val value: View = flexbox.en
+
+  override var layoutModifiers: LayoutModifier = LayoutModifier
 }
