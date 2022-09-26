@@ -58,7 +58,7 @@ private class ComposeFlexbox : ColumnWidget<@Composable () -> Unit> {
     Layout(
       modifier = Modifier,
       measurePolicy = { measurables, constraints ->
-        val placeable = measurables.measure(modifyConstraints(constraints))
+        val placeable = measurables[0].measure(modifyConstraints(constraints))
         layout(placeable.width, placeable.height) {
           placeable.placeRelative(0, 0)
         }

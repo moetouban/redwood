@@ -16,14 +16,21 @@
 
 package app.cash.redwood.compose
 
+import androidx.compose.ui.layout.Measurable
+import androidx.compose.ui.unit.Constraints
 import app.cash.redwood.AlignSelf
+import app.cash.redwood.MeasureSpec
 import app.cash.redwood.Node
 import app.cash.redwood.Node.Companion.DefaultFlexBasisPercent
 import app.cash.redwood.Node.Companion.DefaultFlexGrow
 import app.cash.redwood.Node.Companion.DefaultFlexShrink
 import app.cash.redwood.Spacing
 
-private class MeasurableNode() : Node {
+internal fun Constraints.toMeasureSpecs(): Pair<MeasureSpec, MeasureSpec> {
+
+}
+
+private class MeasurableNode(private val measurable: Measurable) : Node {
   override val alignSelf = AlignSelf.Auto
   override val baseline = -1
   override val flexBasisPercent = DefaultFlexBasisPercent
