@@ -18,7 +18,11 @@ package app.cash.redwood.treehouse
 import app.cash.redwood.protocol.widget.DiffConsumingWidget
 import kotlinx.cinterop.ObjCAction
 import kotlinx.cinterop.cValue
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import platform.CoreGraphics.CGRectZero
+import platform.UIKit.UITraitCollection
+import platform.UIKit.UIUserInterfaceStyle.UIUserInterfaceStyleDark
 import platform.UIKit.UIView
 import platform.UIKit.setFrame
 import platform.UIKit.subviews
@@ -41,6 +45,11 @@ public class TreehouseUIKitView<T : Any>(
   override val protocolDisplayRoot: DiffConsumingWidget<*> =
     ProtocolDisplayRoot(view)
 
+  private val mutableHostConfiguration = MutableStateFlow(HostConfiguration())
+
+  override val hostConfiguration: StateFlow<HostConfiguration>
+    get() = mutableHostConfiguration
+
   public fun setContent(content: TreehouseView.Content<T>) {
     treehouseApp.dispatchers.checkUi()
     this.content = content
@@ -49,6 +58,12 @@ public class TreehouseUIKitView<T : Any>(
 
   internal fun superviewChanged() {
     treehouseApp.onContentChanged(this)
+  }
+
+  internal fun updateHostConfiguration(traitCollection: UITraitCollection) {
+    mutableHostConfiguration.value = HostConfiguration(
+      darkMode = traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark,
+    )
   }
 }
 
@@ -64,5 +79,13 @@ private class RootUiView(
 
   @ObjCAction fun didMoveToSuperview() {
     treehouseView.superviewChanged()
+    if (superview != null) {
+      treehouseView.updateHostConfiguration(traitCollection)
+    }
+  }
+
+  override fun traitCollectionDidChange(previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    treehouseView.updateHostConfiguration(traitCollection)
   }
 }

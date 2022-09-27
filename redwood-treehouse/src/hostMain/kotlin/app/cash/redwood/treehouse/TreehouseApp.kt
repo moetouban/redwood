@@ -198,7 +198,7 @@ public class TreehouseApp<T : Any>(
         }
       }
 
-      content.start(diffSinkService)
+      content.start(diffSinkService, view.hostConfiguration.toFlowWithInitialValue())
     }
 
     fun cancel() {
