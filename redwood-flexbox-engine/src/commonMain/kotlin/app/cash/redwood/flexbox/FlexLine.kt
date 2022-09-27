@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Google Inc. All rights reserved.
+ * Copyright (C) 2022 Square, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,14 +80,14 @@ internal class FlexLine {
   @JvmField var lastIndex = 0
 
   /**
-   * Set to true if any [Node]s in this line have [Node.flexGrow] attributes set
-   * (i.e. have a value other than [Node.DefaultFlexGrow]).
+   * Set to true if any [FlexItem]s in this line have [FlexItem.flexGrow] attributes set
+   * (i.e. have a value other than [FlexItem.DefaultFlexGrow]).
    */
   @JvmField var anyItemsHaveFlexGrow = false
 
   /**
-   * Set to true if any [Node]s in this line have [Node.flexShrink] attributes set
-   * (i.e. have a value other than [Node.UndefinedFlexShrink]).
+   * Set to true if any [FlexItem]s in this line have [FlexItem.flexShrink] attributes set
+   * (i.e. have a value other than [FlexItem.UndefinedFlexShrink]).
    */
   @JvmField var anyItemsHaveFlexShrink = false
 }

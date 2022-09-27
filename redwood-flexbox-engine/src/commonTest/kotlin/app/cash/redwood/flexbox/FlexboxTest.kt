@@ -33,7 +33,7 @@ class FlexboxTest {
     val widgets = imdbTop4.map { StringWidget(it) }
     val engine = FlexboxEngine().apply {
       flexDirection = FlexDirection.Column
-      nodes += widgets.map { it.toNode() }
+      items += widgets.map { it.toNode() }
     }
 
     assertEquals(
@@ -68,7 +68,7 @@ class FlexboxTest {
     val widgets = imdbTop4.map { StringWidget(it) }
     val engine = FlexboxEngine().apply {
       flexDirection = Row
-      nodes += widgets.map { it.toNode() }
+      items += widgets.map { it.toNode() }
     }
 
     assertEquals(
@@ -91,7 +91,7 @@ class FlexboxTest {
     val widgets = imdbTop4.map { StringWidget(it) }
     val engine = FlexboxEngine().apply {
       flexDirection = Row
-      nodes += widgets.map { it.toNode() }
+      items += widgets.map { it.toNode() }
       alignItems = AlignItems.Center
     }
 
@@ -115,7 +115,7 @@ class FlexboxTest {
     val widgets = imdbTop4.map { StringWidget(it) }
     val engine = FlexboxEngine().apply {
       flexDirection = Row
-      nodes += widgets.map { it.toNode(Node(flexBasisPercent = 0f)) }
+      items += widgets.map { it.toNode(FlexItem(flexBasisPercent = 0f)) }
       justifyContent = JustifyContent.Center
     }
 
@@ -141,7 +141,7 @@ class FlexboxTest {
     val widthSpec = MeasureSpec.from(width, MeasureSpecMode.Exactly)
     val heightSpec = MeasureSpec.from(height, MeasureSpecMode.Exactly)
 
-    flexLines = when (flexDirection) {
+    lines = when (flexDirection) {
       Row, RowReverse -> calculateHorizontalFlexLines(widthSpec, heightSpec)
       else -> calculateVerticalFlexLines(widthSpec, heightSpec)
     }
@@ -156,8 +156,8 @@ class FlexboxTest {
     return canvas.toString()
   }
 
-  private fun StringWidget.toNode(node: Node = Node()): Node {
-    return node.apply {
+  private fun StringWidget.toNode(item: FlexItem = FlexItem()): FlexItem {
+    return item.apply {
       this.measurable = this@toNode
       this.layout = this@toNode::layout
     }

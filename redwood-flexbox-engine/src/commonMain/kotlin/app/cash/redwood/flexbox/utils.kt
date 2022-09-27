@@ -32,7 +32,7 @@ internal fun unpackHigher(value: Long): Int {
 
 /** Convenience function to use named arguments. */
 @Suppress("EXTENSION_FUNCTION_SHADOWED_BY_MEMBER_PROPERTY_WITH_INVOKE")
-internal inline fun Node.layout(left: Int, top: Int, right: Int, bottom: Int) {
+internal inline fun FlexItem.layout(left: Int, top: Int, right: Int, bottom: Int) {
   layout(left, top, right, bottom)
 }
 
