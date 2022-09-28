@@ -1,7 +1,7 @@
-Redwood
+Redwood Layout
 =======
 
-This artifact includes `Column` and `Row` widget implementations for Android Views, Android Compose UI, and iOS UIKit.
+This artifact includes `Row` and `Column` widget implementations for Android Views, Android Compose UI, and iOS UIKit.
 
 To being, add the follow entries to your `schema.kt`:
 

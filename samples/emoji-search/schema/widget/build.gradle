@@ -17,7 +17,7 @@ kotlin {
   sourceSets {
     commonMain {
       dependencies {
-        api projects.redwoodComposeLayout
+        api projects.redwoodLayout
       }
     }
   }
