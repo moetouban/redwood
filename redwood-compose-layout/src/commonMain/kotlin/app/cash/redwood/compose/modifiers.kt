@@ -16,9 +16,13 @@
 package app.cash.redwood.compose
 
 import app.cash.redwood.LayoutModifier
+import kotlinx.serialization.Serializable
 
+@Serializable
 public data class GrowLayoutModifier(val value: Int) : LayoutModifier.Element
 
+@Serializable
 public data class ShrinkLayoutModifier(val value: Int) : LayoutModifier.Element
 
+@Serializable
 public data class CrossAxisAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element

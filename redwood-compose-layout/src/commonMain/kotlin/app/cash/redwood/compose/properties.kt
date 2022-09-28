@@ -20,9 +20,11 @@ package app.cash.redwood.compose
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import kotlin.jvm.JvmInline
+import kotlinx.serialization.Serializable
 
 /** Equivalent to `justify-content`. */
 @JvmInline
+@Serializable
 public value class MainAxisAlignment(public val ordinal: Int) {
   init {
     require(ordinal in 0..5) { "Unknown MainAxisAlignment: $ordinal" }
@@ -50,6 +52,7 @@ public value class MainAxisAlignment(public val ordinal: Int) {
 
 /** Equivalent to `align-items`. */
 @JvmInline
+@Serializable
 public value class CrossAxisAlignment(public val ordinal: Int) {
   init {
     require(ordinal in 0..3) { "Unknown CrossAxisAlignment: $ordinal" }
@@ -73,6 +76,7 @@ public value class CrossAxisAlignment(public val ordinal: Int) {
 
 /** Equivalent to `overflow-x`/`overflow-y`. */
 @JvmInline
+@Serializable
 public value class Overflow(public val ordinal: Int) {
   init {
     require(ordinal in 0..1) { "Unknown Overflow: $ordinal" }
@@ -91,6 +95,7 @@ public value class Overflow(public val ordinal: Int) {
 }
 
 @Immutable
+@Serializable
 public data class Padding(
   val start: Int = 0,
   val end: Int = 0,
