@@ -34,21 +34,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.json.Json
 
-class LazyImage(private val json: Json, private val images: List<EmojiImage>) : LazyListIntervalContent.Item {
-
-  override fun get(index: Int): ZiplineTreehouseUi {
-    val treehouseUi = object : TreehouseUi {
-      @Composable
-      override fun Show() {
-        val image = images[index]
-        println("veyndan___ ${image.label}")
-        Image(url = image.url)
-      }
-    }
-    return treehouseUi.asZiplineTreehouseUi(DiffProducingEmojiSearchWidgetFactory(json), widgetVersion = 1u)
-  }
-}
-
 class EmojiSearchTreehouseUi(
   private val initialViewModel: EmojiSearchViewModel,
   private val viewModels: Flow<EmojiSearchViewModel>,
@@ -66,24 +51,23 @@ class EmojiSearchTreehouseUi(
         hint = "Search",
         onTextChanged = { onEvent(SearchTermEvent(it)) },
       )
-      LazyColumn {
-        items(
-          viewModel.images.size,
-          itemContent = LazyImage(json, viewModel.images),
-        )
+      LazyColumn(json) {
+        items(viewModel.images.size) { index ->
+          Image(url = viewModel.images[index].url)
+        }
       }
     }
   }
 }
 
 @Composable
-fun LazyColumn(content: LazyListScope.() -> Unit) {
-  val lazyListScope = LazyListScope()
+fun LazyColumn(json: Json, content: LazyListScope.() -> Unit) {
+  val lazyListScope = LazyListScope(json)
   content(lazyListScope)
   example.schema.compose.LazyColumn(IntervalListLazyListIntervalContentWrapper(lazyListScope._intervals))
 }
 
-class LazyListScope {
+class LazyListScope(private val json: Json) {
 
   /* private */ @Contextual
   val _intervals = MutableIntervalList<LazyListIntervalContent>()
@@ -91,14 +75,30 @@ class LazyListScope {
   @Contextual
   val intervals: IntervalList<LazyListIntervalContent> = _intervals
 
+  private class Item(
+    private val json: Json,
+    private val content: @Composable (index: Int) -> Unit,
+  ) : LazyListIntervalContent.Item {
+
+    override fun get(index: Int): ZiplineTreehouseUi {
+      val treehouseUi = object : TreehouseUi {
+        @Composable
+        override fun Show() {
+          content(index)
+        }
+      }
+      return treehouseUi.asZiplineTreehouseUi(DiffProducingEmojiSearchWidgetFactory(json), widgetVersion = 1u)
+    }
+  }
+
   fun items(
     count: Int,
-    itemContent: LazyListIntervalContent.Item,
+    itemContent: @Composable (index: Int) -> Unit,
   ) {
     _intervals.addInterval(
       count,
       LazyListIntervalContent(
-        item = itemContent,
+        item = Item(json, itemContent),
       ),
     )
   }
