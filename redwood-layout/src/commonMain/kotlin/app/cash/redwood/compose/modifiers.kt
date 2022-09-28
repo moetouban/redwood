@@ -20,16 +20,24 @@ import kotlinx.serialization.Serializable
 
 /** Grow the node relative to [value] along the main axis. */
 @Serializable
-public data class GrowLayoutModifier(val value: Int) : LayoutModifier.Element
+public data class GrowLayoutModifier(
+  val value: Int,
+) : LayoutModifier.Element
 
 /** Shrink the node relative to [value] along the main axis. */
 @Serializable
-public data class ShrinkLayoutModifier(val value: Int) : LayoutModifier.Element
+public data class ShrinkLayoutModifier(
+  val value: Int,
+) : LayoutModifier.Element
 
 /** Set the alignment for a node along the horizontal axis. */
 @Serializable
-public data class HorizontalAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
+public data class HorizontalAlignmentLayoutModifier(
+  val alignment: CrossAxisAlignment,
+) : LayoutModifier.Element
 
 /** Set the alignment for a node along the vertical axis. */
 @Serializable
-public data class VerticalAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
+public data class VerticalAlignmentLayoutModifier(
+  val alignment: CrossAxisAlignment,
+) : LayoutModifier.Element

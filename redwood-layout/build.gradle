@@ -12,12 +12,9 @@ kotlin {
     commonMain {
       dependencies {
         implementation projects.redwoodFlexboxEngine
-        api projects.redwoodCompose
-        api projects.redwoodWidgetCompose
-        api projects.redwoodProtocolCompose
-        api libs.jetbrains.compose.runtime
+        api projects.redwoodRuntime
+        api projects.redwoodWidget
         api libs.kotlinx.serialization.core
-        api libs.kotlinx.serialization.json
       }
     }
     androidMain {
