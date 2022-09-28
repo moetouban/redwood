@@ -28,7 +28,7 @@ object RowScope {
 
   /** https://developer.mozilla.org/en-US/docs/Web/CSS/align-self */
   fun LayoutModifier.verticalAlignment(alignment: CrossAxisAlignment): LayoutModifier {
-    return then(CrossAxisAlignmentLayoutModifier(alignment))
+    return then(VerticalAlignmentLayoutModifier(alignment))
   }
 }
 
@@ -54,7 +54,7 @@ object ColumnScope {
 
   /** https://developer.mozilla.org/en-US/docs/Web/CSS/align-self */
   fun LayoutModifier.horizontalAlignment(alignment: CrossAxisAlignment): LayoutModifier {
-    return then(CrossAxisAlignmentLayoutModifier(alignment))
+    return then(HorizontalAlignmentLayoutModifier(alignment))
   }
 }
 ```

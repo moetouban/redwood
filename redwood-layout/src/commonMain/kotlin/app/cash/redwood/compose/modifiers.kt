@@ -26,6 +26,10 @@ public data class GrowLayoutModifier(val value: Int) : LayoutModifier.Element
 @Serializable
 public data class ShrinkLayoutModifier(val value: Int) : LayoutModifier.Element
 
-/** Set the alignment for a node along the cross axis. */
+/** Set the alignment for a node along the horizontal axis. */
 @Serializable
-public data class CrossAxisAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
+public data class HorizontalAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
+
+/** Set the alignment for a node along the vertical axis. */
+@Serializable
+public data class VerticalAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
