@@ -31,9 +31,9 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Constraints
 import app.cash.redwood.LayoutModifier
 import app.cash.redwood.flexbox.FlexDirection
+import app.cash.redwood.flexbox.FlexNode
 import app.cash.redwood.flexbox.FlexboxEngine
 import app.cash.redwood.flexbox.MeasureSpec
-import app.cash.redwood.flexbox.Node
 import app.cash.redwood.flexbox.Size
 import app.cash.redwood.widget.Widget
 import app.cash.redwood.widget.compose.ComposeWidgetChildren
@@ -94,7 +94,7 @@ public class ComposeColumn : ColumnWidget<@Composable () -> Unit> {
   ): MeasureResult = with(scope) {
     engine.nodes.clear()
     measurables.forEach { measurable ->
-      val node = Node()
+      val node = FlexNode()
       node.measurable = ComposeMeasurable(measurable)
       engine.nodes += node
     }
