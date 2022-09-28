@@ -29,16 +29,6 @@ internal fun MainAxisAlignment.toJustifyContent() = when (this) {
   else -> throw AssertionError()
 }
 
-internal fun JustifyContent.toMainAxisAlignment() = when (this) {
-  JustifyContent.FlexStart -> MainAxisAlignment.Start
-  JustifyContent.Center -> MainAxisAlignment.Center
-  JustifyContent.FlexEnd -> MainAxisAlignment.End
-  JustifyContent.SpaceBetween -> MainAxisAlignment.SpaceBetween
-  JustifyContent.SpaceAround -> MainAxisAlignment.SpaceAround
-  JustifyContent.SpaceEvenly -> MainAxisAlignment.SpaceEvenly
-  else -> throw AssertionError()
-}
-
 internal fun CrossAxisAlignment.toAlignItems() = when (this) {
   CrossAxisAlignment.Start -> AlignItems.FlexStart
   CrossAxisAlignment.Center -> AlignItems.Center
@@ -47,14 +37,4 @@ internal fun CrossAxisAlignment.toAlignItems() = when (this) {
   else -> throw AssertionError()
 }
 
-internal fun AlignItems.toCrossAxisAlignment() = when (this) {
-  AlignItems.FlexStart -> CrossAxisAlignment.Start
-  AlignItems.Center -> CrossAxisAlignment.Center
-  AlignItems.FlexEnd -> CrossAxisAlignment.End
-  AlignItems.Stretch -> CrossAxisAlignment.Stretch
-  else -> throw AssertionError()
-}
-
 internal fun Padding.toSpacing() = Spacing(start, end, top, bottom)
-
-internal fun Spacing.toPadding() = Padding(start, end, top, bottom)

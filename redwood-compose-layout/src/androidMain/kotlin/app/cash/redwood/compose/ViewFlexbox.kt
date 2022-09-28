@@ -25,59 +25,64 @@ import app.cash.redwood.flexbox.FlexboxEngine
 import app.cash.redwood.widget.MutableListChildren
 import app.cash.redwood.widget.Widget
 
-private class ViewFlexbox(context: Context) {
-  val engine = FlexboxEngine()
-  val view = HostView(context)
+public class ViewColumn(context: Context) : ColumnWidget<View> {
+  private val engine = FlexboxEngine().apply {
+    flexDirection = FlexDirection.Column
+  }
+  private val view = HostView(context)
 
-  val children = MutableListChildren(
+  override val children: Widget.Children<View> = MutableListChildren(
     onUpdate = { views ->
       engine.nodes.clear()
       views.forEach { engine.nodes += it.asNode() }
-      view.invalidate()
-      view.requestLayout()
+      invalidate()
     },
   )
 
-  inner class HostView(context: Context) : ScrollView(context) {
+  override val value: View get() = view
+
+  override var layoutModifiers: LayoutModifier = LayoutModifier
+
+  override fun padding(padding: Padding) {
+    engine.padding = padding.toSpacing()
+    invalidate()
+  }
+
+  override fun overflow(overflow: Overflow) {
+    if (overflow == Overflow.Scroll) {
+      view.setOnTouchListener { _, _ -> true }
+    } else {
+      view.setOnTouchListener(null)
+    }
+    invalidate()
+  }
+
+  override fun horizontalAlignment(horizontalAlignment: CrossAxisAlignment) {
+    engine.alignItems = horizontalAlignment.toAlignItems()
+    invalidate()
+  }
+
+  override fun verticalAlignment(verticalAlignment: MainAxisAlignment) {
+    engine.justifyContent = verticalAlignment.toJustifyContent()
+    invalidate()
+  }
+
+  private fun invalidate() {
+    view.invalidate()
+    view.requestLayout()
+  }
+
+  private inner class HostView(context: Context) : ScrollView(context) {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
       val widthSpec = RedwoodMeasureSpec.fromAndroid(widthMeasureSpec)
       val heightSpec = RedwoodMeasureSpec.fromAndroid(heightMeasureSpec)
-      engine.measure(widthSpec, heightSpec)
+      val (width, height) = engine.measure(widthSpec, heightSpec)
+      setMeasuredDimension(width, height)
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
       engine.layout(left, top, right, bottom)
     }
   }
-}
-
-public class ViewColumnDelegate(context: Context) : Widget<View> {
-  private val flexbox = ViewFlexbox(context).apply {
-    engine.flexDirection = FlexDirection.Column
-  }
-
-  public var padding: Padding
-    get() = flexbox.engine.padding.toPadding()
-    set(value) {
-      flexbox.engine.padding = value.toSpacing()
-    }
-
-  public var overflow: Overflow = Overflow.Clip
-
-  public var horizontalAlignment: CrossAxisAlignment
-    get() = flexbox.engine.alignItems.toCrossAxisAlignment()
-    set(value) {
-      flexbox.engine.alignItems = value.toAlignItems()
-    }
-
-  public var verticalAlignment: MainAxisAlignment
-    get() = flexbox.engine.justifyContent.toMainAxisAlignment()
-    set(value) {
-      flexbox.engine.justifyContent = value.toJustifyContent()
-    }
-
-  override val value: View = flexbox.view
-
-  override var layoutModifiers: LayoutModifier = LayoutModifier
 }

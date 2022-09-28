@@ -46,13 +46,24 @@ internal fun MeasureSpecMode.toAndroid(): Int = when (this) {
 }
 
 internal fun View.asNode() = Node().apply {
-  measurable = object : Measurable() {
-    override val width get() = this@asNode.width
-    override val height get() = this@asNode.height
-    override fun measure(widthSpec: MeasureSpec, heightSpec: MeasureSpec): Size {
-      this@asNode.measure(widthSpec.toAndroid(), heightSpec.toAndroid())
-      return Size(measuredWidth, measuredHeight)
-    }
-  }
+  measurable = ViewMeasurable(this@asNode)
   layout = ::layout
+}
+
+private class ViewMeasurable(val view: View) : Measurable() {
+  override val width get() = view.width
+  override val height get() = view.height
+  override val minWidth: Int
+    get() = super.minWidth
+  override val minHeight: Int
+    get() = super.minHeight
+  override val maxWidth: Int
+    get() = super.maxWidth
+  override val maxHeight: Int
+    get() = super.maxHeight
+
+  override fun measure(widthSpec: MeasureSpec, heightSpec: MeasureSpec): Size {
+    view.measure(widthSpec.toAndroid(), heightSpec.toAndroid())
+    return Size(view.measuredWidth, view.measuredHeight)
+  }
 }
