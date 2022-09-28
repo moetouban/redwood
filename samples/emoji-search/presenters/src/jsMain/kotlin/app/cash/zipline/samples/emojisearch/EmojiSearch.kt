@@ -33,12 +33,16 @@ import example.values.MutableIntervalList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
 
+interface JsonProvider {
+  val json: Json
+}
+
 class EmojiSearchTreehouseUi(
   private val initialViewModel: EmojiSearchViewModel,
   private val viewModels: Flow<EmojiSearchViewModel>,
   private val onEvent: (EmojiSearchEvent) -> Unit,
-  private val json: Json,
-) : TreehouseUi {
+  override val json: Json,
+) : TreehouseUi, JsonProvider {
 
   @Composable
   override fun Show() {
@@ -50,7 +54,7 @@ class EmojiSearchTreehouseUi(
         hint = "Search",
         onTextChanged = { onEvent(SearchTermEvent(it)) },
       )
-      LazyColumn(json) {
+      LazyColumn {
         items(viewModel.images.size) { index ->
           Image(url = viewModel.images[index].url)
         }
@@ -60,7 +64,7 @@ class EmojiSearchTreehouseUi(
 }
 
 @Composable
-fun LazyColumn(json: Json, content: LazyListScope.() -> Unit) {
+fun JsonProvider.LazyColumn(content: LazyListScope.() -> Unit) {
   val lazyListScope = LazyListScope(json)
   content(lazyListScope)
   example.schema.compose.LazyColumn(IntervalListLazyListIntervalContentWrapper(lazyListScope.intervals))
