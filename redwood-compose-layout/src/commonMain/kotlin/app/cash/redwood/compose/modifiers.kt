@@ -21,6 +21,4 @@ public data class GrowLayoutModifier(val value: Int) : LayoutModifier.Element
 
 public data class ShrinkLayoutModifier(val value: Int) : LayoutModifier.Element
 
-public data class HorizontalAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
-
-public data class VerticalAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
+public data class CrossAxisAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element

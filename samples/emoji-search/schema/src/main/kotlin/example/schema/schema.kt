@@ -17,13 +17,12 @@ package example.schema
 
 import app.cash.redwood.LayoutModifier
 import app.cash.redwood.compose.CrossAxisAlignment
+import app.cash.redwood.compose.CrossAxisAlignmentLayoutModifier
 import app.cash.redwood.compose.GrowLayoutModifier
-import app.cash.redwood.compose.HorizontalAlignmentLayoutModifier
 import app.cash.redwood.compose.MainAxisAlignment
 import app.cash.redwood.compose.Overflow
 import app.cash.redwood.compose.Padding
 import app.cash.redwood.compose.ShrinkLayoutModifier
-import app.cash.redwood.compose.VerticalAlignmentLayoutModifier
 import app.cash.redwood.schema.Children
 import app.cash.redwood.schema.Default
 import app.cash.redwood.schema.Property
@@ -63,7 +62,7 @@ object RowScope {
 
   /** https://developer.mozilla.org/en-US/docs/Web/CSS/align-self */
   fun LayoutModifier.verticalAlignment(alignment: CrossAxisAlignment): LayoutModifier {
-    return then(VerticalAlignmentLayoutModifier(alignment))
+    return then(CrossAxisAlignmentLayoutModifier(alignment))
   }
 }
 
@@ -89,7 +88,7 @@ object ColumnScope {
 
   /** https://developer.mozilla.org/en-US/docs/Web/CSS/align-self */
   fun LayoutModifier.horizontalAlignment(alignment: CrossAxisAlignment): LayoutModifier {
-    return then(HorizontalAlignmentLayoutModifier(alignment))
+    return then(CrossAxisAlignmentLayoutModifier(alignment))
   }
 }
 
