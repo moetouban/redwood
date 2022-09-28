@@ -16,28 +16,83 @@
 package app.cash.zipline.samples.emojisearch
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import app.cash.redwood.LayoutModifier
-import app.cash.redwood.widget.compose.ComposeWidgetChildren
+import app.cash.redwood.treehouse.TreehouseApp
+import app.cash.redwood.treehouse.TreehouseView
+import app.cash.redwood.treehouse.ZiplineTreehouseUi
+import app.cash.redwood.treehouse.composeui.TreehouseComposeView
 import example.schema.widget.LazyColumn
+import example.values.IntervalList
+import example.values.IntervalListLazyListIntervalContentWrapper
+import example.values.LazyListIntervalContent
+import example.values.MutableIntervalList
 
-class ComposeUiLazyColumn : LazyColumn<@Composable () -> Unit> {
+class ComposeUiLazyColumn<T : Any>(
+  treehouseApp: TreehouseApp<T>,
+  widgetFactory: AndroidEmojiSearchWidgetFactory<T>,
+) : LazyColumn<@Composable () -> Unit> {
+  private var intervals by mutableStateOf<IntervalList<LazyListIntervalContent>>(MutableIntervalList())
+
   override var layoutModifiers: LayoutModifier = LayoutModifier
 
-  override val children = ComposeWidgetChildren()
+  override fun lazyListIntervalContents(lazyListIntervalContents: IntervalListLazyListIntervalContentWrapper) {
+    this.intervals = lazyListIntervalContents.value
+  }
 
   override val value = @Composable {
     LazyColumn(
       horizontalAlignment = Alignment.CenterHorizontally,
       modifier = Modifier
-        .fillMaxWidth()
+        .fillMaxWidth(),
     ) {
-      items(children.size) { index ->
-        children.render(index)
+      itemsIndexed(intervals) { _, localIntervalIndex, interval ->
+        val item = interval.value.item
+        var shown by remember { mutableStateOf(false) }
+        if (!shown) Text("Waiting…", Modifier.size(64.dp))
+        AndroidView(
+          factory = {
+            TreehouseComposeView(it, treehouseApp, widgetFactory)
+          },
+          update = {
+            it.setContent(
+              object : TreehouseView.Content<T> {
+                override fun get(app: T): ZiplineTreehouseUi {
+                  shown = true
+                  return item.get(localIntervalIndex)
+                }
+              },
+            )
+          },
+        )
       }
     }
+  }
+}
+
+private fun <T> localIntervalIndex(index: Int, interval: IntervalList.Interval<T>) = index - interval.startIndex
+
+private inline fun <T> LazyListScope.itemsIndexed(
+  intervals: IntervalList<T>,
+  crossinline itemContent: @Composable LazyItemScope.(index: Int, localIntervalIndex: Int, interval: IntervalList.Interval<T>) -> Unit,
+) {
+  items(
+    count = intervals.size,
+  ) {
+    val interval = intervals[it]
+    itemContent(it, localIntervalIndex(it, interval), interval)
   }
 }

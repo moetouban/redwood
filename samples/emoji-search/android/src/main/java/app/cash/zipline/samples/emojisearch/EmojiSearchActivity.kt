@@ -46,7 +46,7 @@ class EmojiSearchActivity : ComponentActivity() {
     val view = TreehouseComposeView<EmojiSearchPresenter>(
       context = this,
       treehouseApp = treehouseApp,
-      widgetFactory = AndroidEmojiSearchWidgetFactory,
+      widgetFactory = AndroidEmojiSearchWidgetFactory(treehouseApp),
     )
     view.setContent(object : TreehouseView.Content<EmojiSearchPresenter> {
       override fun get(app: EmojiSearchPresenter): ZiplineTreehouseUi {
@@ -76,7 +76,7 @@ class EmojiSearchActivity : ComponentActivity() {
             view: TreehouseView<*>,
             json: Json,
           ): DiffConsumingWidget.Factory<*> = DiffConsumingEmojiSearchWidgetFactory<@Composable () -> Unit>(
-            delegate = (view as TreehouseComposeView<*>).widgetFactory as AndroidEmojiSearchWidgetFactory,
+            delegate = (view as TreehouseComposeView<*>).widgetFactory as AndroidEmojiSearchWidgetFactory<*>,
             json = json,
           )
         },

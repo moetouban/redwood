@@ -44,6 +44,7 @@ class RealEmojiSearchPresenter(
       initialViewModel = initialViewModel,
       viewModels = produceModels(events),
       onEvent = events::tryEmit,
+      json = json,
     )
     return treehouseUi.asZiplineTreehouseUi(
       factory = DiffProducingEmojiSearchWidgetFactory(json),
@@ -83,7 +84,6 @@ class RealEmojiSearchPresenter(
       .filter { image ->
         latestSearchTerm.split(" ").all { it in image.label }
       }
-      .take(25)
     return EmojiSearchViewModel(latestSearchTerm, filteredImages)
   }
 }
