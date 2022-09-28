@@ -18,11 +18,14 @@ package app.cash.redwood.compose
 import app.cash.redwood.LayoutModifier
 import kotlinx.serialization.Serializable
 
+/** Grow the node relative to [value] along the main axis. */
 @Serializable
 public data class GrowLayoutModifier(val value: Int) : LayoutModifier.Element
 
+/** Shrink the node relative to [value] along the main axis. */
 @Serializable
 public data class ShrinkLayoutModifier(val value: Int) : LayoutModifier.Element
 
+/** Set the alignment for a node along the cross axis. */
 @Serializable
 public data class CrossAxisAlignmentLayoutModifier(val alignment: CrossAxisAlignment) : LayoutModifier.Element
