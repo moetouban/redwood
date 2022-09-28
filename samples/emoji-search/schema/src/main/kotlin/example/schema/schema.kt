@@ -44,8 +44,8 @@ interface EmojiSearch
 data class Row(
   @Property(1) @Default("Padding.Zero") val padding: Padding,
   @Property(2) @Default("Overflow.Clip") val overflow: Overflow,
-  @Property(3) @Default("CrossAxisAlignment.Start") val horizontalAlignment: CrossAxisAlignment,
-  @Property(4) @Default("MainAxisAlignment.Start") val verticalAlignment: MainAxisAlignment,
+  @Property(3) @Default("MainAxisAlignment.Start") val horizontalAlignment: MainAxisAlignment,
+  @Property(4) @Default("CrossAxisAlignment.Start") val verticalAlignment: CrossAxisAlignment,
   @Children(5) val children: RowScope.() -> Unit,
 )
 
