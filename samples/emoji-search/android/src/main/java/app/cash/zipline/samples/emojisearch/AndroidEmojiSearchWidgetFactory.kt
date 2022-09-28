@@ -16,11 +16,14 @@
 package app.cash.zipline.samples.emojisearch
 
 import androidx.compose.runtime.Composable
+import app.cash.redwood.compose.ComposeUiColumn
+import example.schema.widget.Column
 import example.schema.widget.EmojiSearchWidgetFactory
 
 object AndroidEmojiSearchWidgetFactory : EmojiSearchWidgetFactory<@Composable () -> Unit> {
   override fun Row() = TODO()
-  override fun Column() = TODO()
+  override fun Column(): Column<@Composable () -> Unit> =
+    object : ComposeUiColumn(), Column<@Composable () -> Unit> {}
   override fun TextInput() = ComposeUiTextInput()
   override fun Text() = ComposeUiText()
   override fun Image() = ComposeUiImage()

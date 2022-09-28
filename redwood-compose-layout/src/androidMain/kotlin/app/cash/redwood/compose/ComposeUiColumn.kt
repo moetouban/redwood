@@ -38,7 +38,7 @@ import app.cash.redwood.flexbox.Size
 import app.cash.redwood.widget.Widget
 import app.cash.redwood.widget.compose.ComposeWidgetChildren
 
-public class ComposeUiColumn : ColumnWidget<@Composable () -> Unit> {
+public open class ComposeUiColumn : ColumnWidget<@Composable () -> Unit> {
   private val engine = FlexboxEngine().apply {
     flexDirection = FlexDirection.Column
   }

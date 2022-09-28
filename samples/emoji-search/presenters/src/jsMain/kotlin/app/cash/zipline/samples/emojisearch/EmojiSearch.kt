@@ -41,7 +41,9 @@ class EmojiSearchTreehouseUi(
         hint = "Search",
         onTextChanged = { onEvent(SearchTermEvent(it)) },
       )
-      Column(overflow = Overflow.Scroll) {
+      Column(
+        overflow = Overflow.Scroll,
+      ) {
         for (image in viewModel.images) {
           Image(
             url = image.url,
