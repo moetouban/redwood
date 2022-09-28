@@ -31,7 +31,6 @@ import example.values.IntervalListLazyListIntervalContentWrapper
 import example.values.LazyListIntervalContent
 import example.values.MutableIntervalList
 import kotlinx.coroutines.flow.Flow
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.json.Json
 
 class EmojiSearchTreehouseUi(
@@ -64,15 +63,11 @@ class EmojiSearchTreehouseUi(
 fun LazyColumn(json: Json, content: LazyListScope.() -> Unit) {
   val lazyListScope = LazyListScope(json)
   content(lazyListScope)
-  example.schema.compose.LazyColumn(IntervalListLazyListIntervalContentWrapper(lazyListScope._intervals))
+  example.schema.compose.LazyColumn(IntervalListLazyListIntervalContentWrapper(lazyListScope.intervals))
 }
 
 class LazyListScope(private val json: Json) {
-
-  /* private */ @Contextual
-  val _intervals = MutableIntervalList<LazyListIntervalContent>()
-
-  @Contextual
+  private val _intervals = MutableIntervalList<LazyListIntervalContent>()
   val intervals: IntervalList<LazyListIntervalContent> = _intervals
 
   private class Item(

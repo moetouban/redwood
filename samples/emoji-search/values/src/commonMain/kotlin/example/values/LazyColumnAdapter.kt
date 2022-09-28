@@ -22,7 +22,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class IntervalListLazyListIntervalContentWrapper(
-  @Contextual val value: MutableIntervalList<LazyListIntervalContent>,
+  @Contextual val value: IntervalList<LazyListIntervalContent>,
 )
 
 @Serializable

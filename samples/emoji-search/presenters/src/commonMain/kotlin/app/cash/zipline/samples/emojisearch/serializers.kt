@@ -27,11 +27,15 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 
 val treehouseSerializersModule = SerializersModule {
   contextual(ziplineServiceSerializer<LazyListIntervalContent.Item>())
   contextual(MutableVectorLazyListIntervalContentSerializer)
-  contextual(MutableIntervalListSerializer)
+  polymorphic(IntervalList::class) {
+    subclass(MutableIntervalListSerializer)
+  }
 }
 
 object MutableVectorLazyListIntervalContentSerializer : KSerializer<MutableVector<LazyListIntervalContent>> {
