@@ -21,11 +21,6 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-class IntervalListLazyListIntervalContentWrapper(
-  @Contextual val value: IntervalList<LazyListIntervalContent>,
-)
-
-@Serializable
 class LazyListIntervalContent(
   @Contextual val item: Item,
 ) {

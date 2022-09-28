@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package app.cash.zipline.samples.emojisearch
 
 import androidx.compose.runtime.Composable
@@ -22,7 +21,6 @@ import app.cash.redwood.treehouse.ZiplineTreehouseUi
 import app.cash.redwood.treehouse.asZiplineTreehouseUi
 import example.schema.compose.DiffProducingEmojiSearchWidgetFactory
 import example.values.IntervalList
-import example.values.IntervalListLazyListIntervalContentWrapper
 import example.values.LazyListIntervalContent
 import example.values.MutableIntervalList
 import kotlinx.serialization.json.Json
@@ -35,7 +33,7 @@ interface JsonProvider {
 fun JsonProvider.LazyColumn(content: LazyListScope.() -> Unit) {
   val lazyListScope = LazyListScope(json)
   content(lazyListScope)
-  example.schema.compose.LazyColumn(IntervalListLazyListIntervalContentWrapper(lazyListScope.intervals))
+  example.schema.compose.LazyColumn(lazyListScope.intervals)
 }
 
 class LazyListScope(private val json: Json) {

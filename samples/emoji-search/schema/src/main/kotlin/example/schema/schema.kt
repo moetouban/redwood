@@ -19,7 +19,9 @@ import app.cash.redwood.schema.Children
 import app.cash.redwood.schema.Property
 import app.cash.redwood.schema.Schema
 import app.cash.redwood.schema.Widget
-import example.values.IntervalListLazyListIntervalContentWrapper
+import example.values.IntervalList
+import example.values.LazyListIntervalContent
+import kotlinx.serialization.Contextual
 
 @Schema(
   [
@@ -45,7 +47,8 @@ data class Column(
 
 @Widget(3)
 data class LazyColumn(
-  @Property(1) val lazyListIntervalContents: IntervalListLazyListIntervalContentWrapper,
+  @Property(1) @Contextual
+  val intervals: IntervalList<LazyListIntervalContent>,
 )
 
 @Widget(4)

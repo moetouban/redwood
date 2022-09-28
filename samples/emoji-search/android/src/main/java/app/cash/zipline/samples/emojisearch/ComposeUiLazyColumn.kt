@@ -37,7 +37,6 @@ import app.cash.redwood.treehouse.ZiplineTreehouseUi
 import app.cash.redwood.treehouse.composeui.TreehouseComposeView
 import example.schema.widget.LazyColumn
 import example.values.IntervalList
-import example.values.IntervalListLazyListIntervalContentWrapper
 import example.values.LazyListIntervalContent
 import example.values.MutableIntervalList
 
@@ -49,8 +48,8 @@ class ComposeUiLazyColumn<T : Any>(
 
   override var layoutModifiers: LayoutModifier = LayoutModifier
 
-  override fun lazyListIntervalContents(lazyListIntervalContents: IntervalListLazyListIntervalContentWrapper) {
-    this.intervals = lazyListIntervalContents.value
+  override fun intervals(intervals: IntervalList<LazyListIntervalContent>) {
+    this.intervals = intervals
   }
 
   override val value = @Composable {
