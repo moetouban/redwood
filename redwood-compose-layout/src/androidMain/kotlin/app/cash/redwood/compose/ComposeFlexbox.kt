@@ -28,7 +28,7 @@ import app.cash.redwood.FlexboxEngine
 import app.cash.redwood.LayoutModifier
 import app.cash.redwood.Node
 
-private class ComposeFlexbox : ColumnWidget<@Composable () -> Unit> {
+private class ComposeFlexbox { // ColumnWidget<@Composable () -> Unit>
   private val engine = FlexboxEngine()
 
   var direction: FlexDirection
@@ -37,29 +37,29 @@ private class ComposeFlexbox : ColumnWidget<@Composable () -> Unit> {
       engine.flexDirection = value
     }
 
-  override var padding: Padding
+  var padding: Padding
     get() = engine.padding.toPadding()
     set(value) {
       engine.padding = value.toSpacing()
     }
 
-  override var overflow: Overflow = Overflow.Clip
+  var overflow: Overflow = Overflow.Clip
 
-  override var horizontalAlignment: CrossAxisAlignment
+  var horizontalAlignment: CrossAxisAlignment
     get() = engine.alignItems.toCrossAxisAlignment()
     set(value) {
       engine.alignItems = value.toAlignItems()
     }
 
-  override var verticalAlignment: MainAxisAlignment
+  var verticalAlignment: MainAxisAlignment
     get() = engine.justifyContent.toMainAxisAlignment()
     set(value) {
       engine.justifyContent = value.toJustifyContent()
     }
 
-  override var layoutModifiers: LayoutModifier = LayoutModifier
+  var layoutModifiers: LayoutModifier = LayoutModifier
 
-  override val value = @Composable {
+  val value = @Composable {
     val modifier = if (overflow == Overflow.Scroll) {
       when (direction) {
         FlexDirection.Row, FlexDirection.RowReverse -> {
@@ -84,7 +84,7 @@ private class ComposeFlexbox : ColumnWidget<@Composable () -> Unit> {
         val (widthSpec, heightSpec) = constraints.toMeasureSpecs()
         val (width, height) = engine.measure(widthSpec, heightSpec)
         layout(width, height) {
-          placeable.placeRelative(0, 0)
+          //placeable.placeRelative(0, 0)
         }
       }
     )
@@ -93,10 +93,6 @@ private class ComposeFlexbox : ColumnWidget<@Composable () -> Unit> {
   class ComposeNode {
     val node = Node()
     var placeable: Placeable? = null
-
-    init {
-        node.measure =
-    }
   }
 }
 

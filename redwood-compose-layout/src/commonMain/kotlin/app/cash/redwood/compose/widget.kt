@@ -17,16 +17,24 @@ package app.cash.redwood.compose
 
 import app.cash.redwood.widget.Widget
 
+/**
+ * Row widget interface implemented by the platform widget adapter.
+ * This should mirror the interface generated from the schema exactly.
+ */
 public interface RowWidget<T : Any> : Widget<T> {
-  public var padding: Padding
-  public var overflow: Overflow
-  public var horizontalAlignment: MainAxisAlignment
-  public var verticalAlignment: CrossAxisAlignment
+  public fun padding(padding: Padding)
+  public fun overflow(overflow: Overflow)
+  public fun horizontalAlignment(horizontalAlignment: MainAxisAlignment)
+  public fun verticalAlignment(verticalAlignment: CrossAxisAlignment)
 }
 
+/**
+ * Column widget interface implemented by the platform widget adapter.
+ * This should mirror the interface generated from the schema exactly.
+ */
 public interface ColumnWidget<T : Any> : Widget<T> {
-  public var padding: Padding
-  public var overflow: Overflow
-  public var horizontalAlignment: CrossAxisAlignment
-  public var verticalAlignment: MainAxisAlignment
+  public fun padding(padding: Padding)
+  public fun overflow(overflow: Overflow)
+  public fun horizontalAlignment(horizontalAlignment: CrossAxisAlignment)
+  public fun verticalAlignment(verticalAlignment: MainAxisAlignment)
 }

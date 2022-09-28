@@ -77,7 +77,7 @@ public class ViewColumnDelegate(context: Context) : Widget<View> {
       flexbox.engine.justifyContent = value.toJustifyContent()
     }
 
-  override val value: View = flexbox.en
+  override val value: View = flexbox.view
 
   override var layoutModifiers: LayoutModifier = LayoutModifier
 }
