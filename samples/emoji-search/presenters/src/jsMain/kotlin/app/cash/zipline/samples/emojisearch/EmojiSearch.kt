@@ -17,11 +17,11 @@ package app.cash.zipline.samples.emojisearch
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import app.cash.redwood.compose.Overflow
 import app.cash.redwood.treehouse.TreehouseUi
 import app.cash.zipline.samples.emojisearch.EmojiSearchEvent.SearchTermEvent
 import example.schema.compose.Column
 import example.schema.compose.Image
-import example.schema.compose.ScrollableColumn
 import example.schema.compose.TextInput
 import kotlinx.coroutines.flow.Flow
 
@@ -41,7 +41,7 @@ class EmojiSearchTreehouseUi(
         hint = "Search",
         onTextChanged = { onEvent(SearchTermEvent(it)) },
       )
-      ScrollableColumn {
+      Column(overflow = Overflow.Scroll) {
         for (image in viewModel.images) {
           Image(
             url = image.url,
