@@ -15,9 +15,9 @@
  */
 package app.cash.redwood.compose
 
-import app.cash.redwood.AlignItems
-import app.cash.redwood.JustifyContent
-import app.cash.redwood.Spacing
+import app.cash.redwood.flexbox.AlignItems
+import app.cash.redwood.flexbox.JustifyContent
+import app.cash.redwood.flexbox.Spacing
 
 internal fun MainAxisAlignment.toJustifyContent() = when (this) {
   MainAxisAlignment.Start -> JustifyContent.FlexStart

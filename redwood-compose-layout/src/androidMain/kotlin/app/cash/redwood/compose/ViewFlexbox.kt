@@ -15,13 +15,13 @@
  */
 package app.cash.redwood.compose
 
-import app.cash.redwood.MeasureSpec.Companion as RedwoodMeasureSpec
+import app.cash.redwood.flexbox.MeasureSpec.Companion as RedwoodMeasureSpec
 import android.content.Context
 import android.view.View
 import android.widget.ScrollView
-import app.cash.redwood.FlexDirection
-import app.cash.redwood.FlexboxEngine
 import app.cash.redwood.LayoutModifier
+import app.cash.redwood.flexbox.FlexDirection
+import app.cash.redwood.flexbox.FlexboxEngine
 import app.cash.redwood.widget.MutableListChildren
 import app.cash.redwood.widget.Widget
 

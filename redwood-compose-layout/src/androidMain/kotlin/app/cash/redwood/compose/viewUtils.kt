@@ -18,10 +18,11 @@
 package app.cash.redwood.compose
 
 import android.view.View
-import app.cash.redwood.MeasureSpec
-import app.cash.redwood.MeasureSpecMode
-import app.cash.redwood.Node
-import app.cash.redwood.Size
+import app.cash.redwood.flexbox.Measurable
+import app.cash.redwood.flexbox.MeasureSpec
+import app.cash.redwood.flexbox.MeasureSpecMode
+import app.cash.redwood.flexbox.Node
+import app.cash.redwood.flexbox.Size
 
 internal fun MeasureSpec.Companion.fromAndroid(measureSpec: Int): MeasureSpec = from(
   size = View.MeasureSpec.getSize(measureSpec),
@@ -44,13 +45,14 @@ internal fun MeasureSpecMode.toAndroid(): Int = when (this) {
   else -> throw AssertionError()
 }
 
-internal fun View.asNode() = Node(
-  width = width,
-  height = height,
-).apply {
-  measure = { widthSpec, heightSpec ->
-    measure(widthSpec.toAndroid(), heightSpec.toAndroid())
-    Size(measuredWidth, measuredHeight)
+internal fun View.asNode() = Node().apply {
+  measurable = object : Measurable() {
+    override val width get() = this@asNode.width
+    override val height get() = this@asNode.height
+    override fun measure(widthSpec: MeasureSpec, heightSpec: MeasureSpec): Size {
+      this@asNode.measure(widthSpec.toAndroid(), heightSpec.toAndroid())
+      return Size(measuredWidth, measuredHeight)
+    }
   }
   layout = ::layout
 }

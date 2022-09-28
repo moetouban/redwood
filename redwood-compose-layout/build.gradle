@@ -12,6 +12,7 @@ kotlin {
       dependencies {
         implementation projects.redwoodFlexboxEngine
         api projects.redwoodCompose
+        api projects.redwoodWidgetCompose
         api projects.redwoodProtocolCompose
         api libs.jetbrains.compose.runtime
       }

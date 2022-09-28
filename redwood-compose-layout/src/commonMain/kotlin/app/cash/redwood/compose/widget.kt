@@ -19,9 +19,10 @@ import app.cash.redwood.widget.Widget
 
 /**
  * Row widget interface implemented by the platform widget adapter.
- * This should mirror the interface generated from the schema exactly.
+ * This should exactly mirror the interface generated from the schema.
  */
 public interface RowWidget<T : Any> : Widget<T> {
+  public val children: Widget.Children<T>
   public fun padding(padding: Padding)
   public fun overflow(overflow: Overflow)
   public fun horizontalAlignment(horizontalAlignment: MainAxisAlignment)
@@ -30,9 +31,10 @@ public interface RowWidget<T : Any> : Widget<T> {
 
 /**
  * Column widget interface implemented by the platform widget adapter.
- * This should mirror the interface generated from the schema exactly.
+ * This should exactly mirror the interface generated from the schema.
  */
 public interface ColumnWidget<T : Any> : Widget<T> {
+  public val children: Widget.Children<T>
   public fun padding(padding: Padding)
   public fun overflow(overflow: Overflow)
   public fun horizontalAlignment(horizontalAlignment: CrossAxisAlignment)
