@@ -55,8 +55,8 @@ class EmojiSearchTreehouseUi(
         onTextChanged = { onEvent(SearchTermEvent(it)) },
       )
       LazyColumn {
-        items(viewModel.images.size) { index ->
-          Image(url = viewModel.images[index].url)
+        items(viewModel.images) { image ->
+          Image(url = image.url)
         }
       }
     }
@@ -101,4 +101,13 @@ class LazyListScope(private val json: Json) {
       ),
     )
   }
+}
+
+inline fun <T> LazyListScope.items(
+  items: List<T>,
+  crossinline itemContent: @Composable (item: T) -> Unit,
+) = items(
+  count = items.size,
+) {
+  itemContent(items[it])
 }
