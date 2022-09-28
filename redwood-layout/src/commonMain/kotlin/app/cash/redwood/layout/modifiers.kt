@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package app.cash.redwood.compose
+package app.cash.redwood.layout
 
 import app.cash.redwood.LayoutModifier
 import kotlinx.serialization.Serializable

@@ -16,13 +16,13 @@
 package app.cash.zipline.samples.emojisearch
 
 import androidx.compose.runtime.Composable
-import app.cash.redwood.compose.ColumnWidget
-import app.cash.redwood.compose.ComposeColumn
-import app.cash.redwood.compose.CrossAxisAlignment
-import app.cash.redwood.compose.MainAxisAlignment
-import app.cash.redwood.compose.Overflow
-import app.cash.redwood.compose.Padding
-import app.cash.redwood.compose.RowWidget
+import app.cash.redwood.layout.ColumnWidget
+import app.cash.redwood.layout.ComposeColumn
+import app.cash.redwood.layout.CrossAxisAlignment
+import app.cash.redwood.layout.MainAxisAlignment
+import app.cash.redwood.layout.Overflow
+import app.cash.redwood.layout.Padding
+import app.cash.redwood.layout.RowWidget
 import app.cash.redwood.widget.Widget
 import example.schema.widget.Column
 import example.schema.widget.EmojiSearchWidgetFactory

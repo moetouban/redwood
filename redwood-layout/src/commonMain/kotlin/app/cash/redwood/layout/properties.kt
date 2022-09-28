@@ -15,7 +15,7 @@
  */
 @file:Suppress("MemberVisibilityCanBePrivate")
 
-package app.cash.redwood.compose
+package app.cash.redwood.layout
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable

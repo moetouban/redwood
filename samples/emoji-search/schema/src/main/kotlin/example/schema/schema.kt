@@ -16,14 +16,14 @@
 package example.schema
 
 import app.cash.redwood.LayoutModifier
-import app.cash.redwood.compose.CrossAxisAlignment
-import app.cash.redwood.compose.GrowLayoutModifier
-import app.cash.redwood.compose.HorizontalAlignmentLayoutModifier
-import app.cash.redwood.compose.MainAxisAlignment
-import app.cash.redwood.compose.Overflow
-import app.cash.redwood.compose.Padding
-import app.cash.redwood.compose.ShrinkLayoutModifier
-import app.cash.redwood.compose.VerticalAlignmentLayoutModifier
+import app.cash.redwood.layout.CrossAxisAlignment
+import app.cash.redwood.layout.GrowLayoutModifier
+import app.cash.redwood.layout.HorizontalAlignmentLayoutModifier
+import app.cash.redwood.layout.MainAxisAlignment
+import app.cash.redwood.layout.Overflow
+import app.cash.redwood.layout.Padding
+import app.cash.redwood.layout.ShrinkLayoutModifier
+import app.cash.redwood.layout.VerticalAlignmentLayoutModifier
 import app.cash.redwood.schema.Children
 import app.cash.redwood.schema.Default
 import app.cash.redwood.schema.Property

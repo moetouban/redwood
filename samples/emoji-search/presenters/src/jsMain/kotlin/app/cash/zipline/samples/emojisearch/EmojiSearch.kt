@@ -17,7 +17,7 @@ package app.cash.zipline.samples.emojisearch
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import app.cash.redwood.compose.Overflow
+import app.cash.redwood.layout.Overflow
 import app.cash.redwood.treehouse.TreehouseUi
 import app.cash.zipline.samples.emojisearch.EmojiSearchEvent.SearchTermEvent
 import example.schema.compose.Column
