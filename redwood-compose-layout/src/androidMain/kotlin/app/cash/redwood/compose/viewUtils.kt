@@ -53,14 +53,8 @@ internal fun View.asNode() = Node().apply {
 private class ViewMeasurable(val view: View) : Measurable() {
   override val width get() = view.width
   override val height get() = view.height
-  override val minWidth: Int
-    get() = super.minWidth
-  override val minHeight: Int
-    get() = super.minHeight
-  override val maxWidth: Int
-    get() = super.maxWidth
-  override val maxHeight: Int
-    get() = super.maxHeight
+  override val minWidth get() = view.minimumWidth
+  override val minHeight get() = view.minimumHeight
 
   override fun measure(widthSpec: MeasureSpec, heightSpec: MeasureSpec): Size {
     view.measure(widthSpec.toAndroid(), heightSpec.toAndroid())
